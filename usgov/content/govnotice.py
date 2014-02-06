@@ -82,6 +82,13 @@ class IGovNotice(form.Schema, IImageScaleTraversable):
         required=True,
     )
 
+    #網址
+    noticeUrl = schema.TextLine(
+        title=_(u'Notice Url'),
+        required=True,
+    )
+
+
     #聯聯公告
     #不需要，用noticeTitle及solicitationNumber就可以
 
