@@ -4,9 +4,9 @@
    i18n:domain="usgov.content" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
 
   <!-- Basic metadata -->
-  <property name="title" i18n:translate="">govNotice</property>
+  <property name="title" i18n:translate="">GovNotice</property>
   <property name="description"
-    i18n:translate="">gov notice content type</property>
+    i18n:translate="">Gov Notice content type for usgov</property>
   <property name="icon_expr">string:${portal_url}/document_icon.png</property>
   <property name="factory">usgov.content.govnotice</property>
   <property name="global_allow">True</property>
@@ -15,8 +15,8 @@
   <property name="allow_discussion">False</property>
 
   <!-- schema and class used for content items -->
-  <property name="schema">usgov.content.govnotice.IgovNotice</property>
-  <property name="klass">usgov.content.govnotice.govNotice</property>
+  <property name="schema">usgov.content.govnotice.IGovNotice</property>
+  <property name="klass">usgov.content.govnotice.GovNotice</property>
 
   <property name="behaviors">
      <element value="plone.app.content.interfaces.INameFromTitle" />

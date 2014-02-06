@@ -52,12 +52,13 @@ def test_suite():
 
         # -*- extra stuff goes here -*-
 
-        # Integration tests for govNotice
+        # Integration tests for GovNotice
         ztc.ZopeDocFileSuite(
-            'govNotice.txt',
+            'GovNotice.txt',
             package='usgov.content',
             optionflags = OPTION_FLAGS,
             test_class=TestCase),
+
 
 
         ])

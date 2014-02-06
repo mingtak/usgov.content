@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 from five import grok
 
 from z3c.form import group, field
@@ -22,17 +23,75 @@ from usgov.content import MessageFactory as _
 
 # Interface class; used to define content-type schema.
 
-class IgovNotice(form.Schema, IImageScaleTraversable):
+class IGovNotice(form.Schema, IImageScaleTraversable):
     """
-    gov notice content type
+    Gov Notice content type for usgov
     """
+
+    #案名
+    noticeTitle = schema.TextLine(
+        title=_(u'Notice Title'),
+        required=False,
+    )
+
+    #案號
+    solicitationNumber = schema.TextLine(
+        title=_(u'Solicitation Number'),
+        required=False,
+    )
+
+    #標案型態
+    noticeType = schema.TextLine(
+        title=_(u'Notice Type'),
+        required=False,
+    )
+
+    #描述
+    synopsis = schema.Text(
+        title=_(u'Synopsis'),
+        required=False,
+    )
+
+    #承辦地址
+    contractingOfficeAddress = schema.Text(
+        title=_(u'Contracting Office Address'),
+        required=False,
+    )
+
+    #履約地點
+    placeOfPerformance = schema.Text(
+        title=_(u'Place Of Formance'),
+        required=False,
+    )
+
+    #承辦聯絡人
+    primaryPointOfContact = schema.Text(
+        title=_(u'Primary Point Of Contact'),
+        required=False,
+    )
+
+    #承辦代理人
+    secondaryPointOfContact = schema.Text(
+        title=_(u'Secondary Point of Contact'),
+        required=False,
+    )
+
+    #發佈日期
+    postedDate = schema.Datetime(
+        title=_(u'Posted Date'),
+        required=True,
+    )
+
+    #聯聯公告
+    #不需要，用noticeTitle及solicitationNumber就可以
+
 
     # If you want a schema-defined interface, delete the model.load
     # line below and delete the matching file in the models sub-directory.
     # If you want a model-based interface, edit
     # models/govnotice.xml to define the content type.
 
-    form.model("models/govnotice.xml")
+    # form.model("models/govnotice.xml")
 
 
 # Custom content-type class; objects created for this content type will
@@ -40,8 +99,8 @@ class IgovNotice(form.Schema, IImageScaleTraversable):
 # methods and properties. Put methods that are mainly useful for rendering
 # in separate view classes.
 
-class govNotice(Container):
-    grok.implements(IgovNotice)
+class GovNotice(Container):
+    grok.implements(IGovNotice)
 
     # Add your class methods and properties here
 
@@ -59,7 +118,7 @@ class govNotice(Container):
 class SampleView(grok.View):
     """ sample view class """
 
-    grok.context(IgovNotice)
+    grok.context(IGovNotice)
     grok.require('zope2.View')
 
     # grok.name('view')

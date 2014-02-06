@@ -1,10 +1,10 @@
-govNotice Tests
+GovNotice Tests
 -----------------
 
 This is a DocTest file, using the Python doctest format.
 
 
-Create a govNotice object and put it in a folder
+Create a GovNotice object and put it in a folder
 
     Create the object::
 
@@ -28,7 +28,7 @@ Create a govNotice object and put it in a folder
     >>> cobj = addContentToContainer(folder, container)
 
     >>> cobj
-    <govNotice at /plone/Members/test_user_1_/test-title>
+    <GovNotice at /plone/Members/test_user_1_/test-title>
 
     >>> folder['test-title'].Title()
     'Test Title'
