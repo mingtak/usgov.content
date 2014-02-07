@@ -29,6 +29,7 @@ setup(name='usgov.content',
           'plone.app.dexterity [grok, relations]',
           'plone.app.relationfield',
           'plone.namedfile [blobs]',
+          'beautifulsoup4',
           # -*- Extra requirements: -*-
       ],
       entry_points="""
