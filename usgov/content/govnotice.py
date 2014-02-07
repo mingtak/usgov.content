@@ -82,6 +82,18 @@ class IGovNotice(form.Schema, IImageScaleTraversable):
         required=True,
     )
 
+    #附加資訊
+    additionalInfo = schema.Text(
+        title=_(u'Additional Information'),
+        required=False,
+    )
+
+    #聯絡地點
+    pointOfContacts = schema.Text(
+        title=_(u'Point of Contact(s)'),
+        required=False,
+    )
+
     #網址
     noticeUrl = schema.TextLine(
         title=_(u'Notice Url'),
