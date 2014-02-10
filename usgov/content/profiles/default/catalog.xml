@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<object name="portal_catalog">
+    <index name="noticeTitle" meta_type="FieldIndex">
+        <indexed_attr value="noticeTitle"/>
+    </index>
+    <column value="noticeTitle"/>
+
+    <index name="solicitationNumber" meta_type="FieldIndex">
+        <indexed_attr value="solicitationNumber"/>
+    </index>
+    <column value="solicitationNumber"/>
+
+    <index name="noticeType" meta_type="FieldIndex">
+        <indexed_attr value="noticeType"/>
+    </index>
+    <column value="noticeType"/>
+
+    <index name="synopsis" meta_type="FieldIndex">
+        <indexed_attr value="synopsis"/>
+    </index>
+    <column value="synopsis"/>
+
+    <index name="postedDate" meta_type="FieldIndex">
+        <indexed_attr value="postedDate"/>
+    </index>
+    <column value="postedDate"/>
+
+    <index name="noticeUrl" meta_type="FieldIndex">
+        <indexed_attr value="noticeUrl"/>
+    </index>
+    <column value="noticeUrl"/>
+
+</object>
+
