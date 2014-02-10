@@ -12,6 +12,7 @@ from ..config import ERROR_LOG_PATH
 from plone import api
 from random import random, choice, randrange
 from datetime import datetime
+from plone.app.textfield.value import RichTextValue
 
 def writeLog(logFilePath, log):
     with open(logFilePath, 'a') as logFile:
@@ -129,24 +130,26 @@ class GetGovNotice(BrowserView):
                 try:
                     contentId = '%s%s' % (str(datetime.now().strftime('%Y%m%d%H%M')), str(randrange(10000000,100000000)))
                     api.content.create(container=portal['notice'],
-                                       type='usgov.content.govnotice',
-                                       title=result['noticeTitle'],
-                                       id=contentId,
-                                       solicitationNumber = result['solicitationNumber'],
-                                       noticeType = result['noticeType'],
-                                       synopsis = result['synopsis'],
-                                       noticePackages = result['noticePackages'],
-                                       contractingOfficeAddress = result['contractingOfficeAddress'],
-                                       placeOfPerformance = result['placeOfPerformance'],
-                                       primaryPointOfContact = result['primaryPointOfContact'],
-                                       additionalInfo = result['additionalInfo'],
-                                       pointOfContacts = result['pointOfContacts'],
-                                       postedDate = result['postedDate'],
-                                       noticeUrl = result['noticeUrl'],)
+                                       type=u'usgov.content.govnotice',
+                                       title=result['noticeTitle'].decode('utf-8'),
+                                       id=contentId.decode('utf-8'),
+                                       noticeTitle=result['noticeTitle'].decode('utf-8'),
+                                       solicitationNumber=result['solicitationNumber'].decode('utf-8'),
+                                       noticeType=result['noticeType'].decode('utf-8'),
+                                       synopsis=RichTextValue(result['synopsis'].decode('utf-8'), 'text/html', 'text/html'),
+                                       noticePackages=RichTextValue(result['noticePackages'].decode('utf-8'), 'text/html', 'text/html'),
+                                       contractingOfficeAddress=RichTextValue(result['contractingOfficeAddress'].decode('utf-8'), 'text/html', 'text/html'),
+                                       placeOfPerformance=RichTextValue(result['placeOfPerformance'].decode('utf-8'), 'text/html', 'text/html'),
+                                       primaryPointOfContact=RichTextValue(result['primaryPointOfContact'].decode('utf-8'), 'text/html', 'text/html'),
+                                       additionalInfo=RichTextValue(result['additionalInfo'].decode('utf-8'), 'text/html', 'text/html'),
+                                       pointOfContacts=RichTextValue(result['pointOfContacts'].decode('utf-8'), 'text/html', 'text/html'),
+                                       postedDate=result['postedDate'],
+                                       noticeUrl=result['noticeUrl'].decode('utf-8'),)
                 except:
                     continue
                 objectBrain = catalog(id=contentId)
-                object = objectBrain[0].getObject()
-                object.reindexObject()
+                item = objectBrain[0].getObject()
+                item.exclude_from_nav = True
+                item.reindexObject()
                 add_count += 1
         return '總共新增 %s 筆,現在的page = %s' % (add_count, page)

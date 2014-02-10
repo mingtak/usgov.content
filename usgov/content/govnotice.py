@@ -17,8 +17,10 @@ from plone.namedfile.interfaces import IImageScaleTraversable
 from z3c.relationfield.schema import RelationList, RelationChoice
 from plone.formwidget.contenttree import ObjPathSourceBinder
 
-
 from usgov.content import MessageFactory as _
+
+from plone.indexer import indexer
+from collective import dexteritytextindexer
 
 
 # Interface class; used to define content-type schema.
@@ -47,6 +49,7 @@ class IGovNotice(form.Schema, IImageScaleTraversable):
     )
 
     #描述
+    dexteritytextindexer.searchable('synopsis')
     synopsis = RichText(
         title=_(u'Synopsis'),
         required=False,
@@ -66,7 +69,7 @@ class IGovNotice(form.Schema, IImageScaleTraversable):
 
     #履約地點
     placeOfPerformance = RichText(
-        title=_(u'Place Of Formance'),
+        title=_(u'Place Of Performance'),
         required=False,
     )
 
@@ -105,7 +108,6 @@ class IGovNotice(form.Schema, IImageScaleTraversable):
         title=_(u'Notice Url'),
         required=True,
     )
-
 
     #聯聯公告
     #不需要，用noticeTitle及solicitationNumber就可以
@@ -146,6 +148,28 @@ class SampleView(grok.View):
     grok.context(IGovNotice)
     grok.require('zope2.View')
 
-    # grok.name('view')
+    grok.name('view')
 
     # Add view methods here
+
+
+@indexer(IGovNotice)
+def noticeTitle_indexer(obj):
+     return obj.noticeTitle
+grok.global_adapter(noticeTitle_indexer, name='noticeTitle')
+
+@indexer(IGovNotice)
+def synopsis_indexer(obj):
+     return obj.synopsis
+grok.global_adapter(synopsis_indexer, name='synopsis')
+
+@indexer(IGovNotice)
+def postedDate_indexer(obj):
+     return obj.postedDate
+grok.global_adapter(postedDate_indexer, name='postedDate')
+
+@indexer(IGovNotice)
+def noticeUrl_indexer(obj):
+     return obj.noticeUrl
+grok.global_adapter(noticeUrl_indexer, name='noticeUrl')
+
