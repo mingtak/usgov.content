@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from Products.Five.browser import BrowserView
 import urllib2
 from ..config import GOV_NOTICE_URL
+from ..config import PP
 from ..config import FBO_INDEX
 from ..config import TEST_STRING
 from ..config import NOTICE_PACKAGES_PATH
@@ -29,16 +30,24 @@ class GetGovNotice(BrowserView):
             try:
                 getHtml = urllib2.urlopen(GOV_NOTICE_URL + str(page))
             except:
+                writeLog(ERROR_LOG_PATH, str('%s\tweb site NO Response' % datetime.now()))
+                if page == 1:
+                    pass
+                else:
+                    continue
                 raise IOError('web site NO Response')
 
-            noticeListSoup = BeautifulSoup(getHtml.read())
+            getNoticeHtmlDoc = getHtml.read()
+            noticeListSoup = BeautifulSoup(getNoticeHtmlDoc)
             if page == 1:
-                today = noticeListSoup.find(id='row_0').findAll('td')[-1].contents[0].strip().encode('utf-8')
-            for i in range(20):
+                todayString = noticeListSoup.find(id='row_0').findAll('td')[-1].contents[0].strip().encode('utf-8')
+                today = datetime.strptime(todayString, '%b %d, %Y')
+            for i in range(PP):
                 idAttr = 'row_%s' % str(i)
                 trTag = noticeListSoup.find(id=idAttr)
                 noticeHref = trTag.a['href']
-                noticeDate = trTag.findAll('td')[-1].contents[0].strip().encode('utf-8')
+                noticeDateString = trTag.findAll('td')[-1].contents[0].strip().encode('utf-8')
+                noticeDate = datetime.strptime(noticeDateString, '%b %d, %Y')
                 if noticeDate != today:
                     breakOut = True
                     break
@@ -60,7 +69,6 @@ class GetGovNotice(BrowserView):
                 continue
             doc = getNoticeHtml.read()
             soup = BeautifulSoup(doc)
-
             try:
                 #案名
                 noticeTitle = soup.body.h2.contents[0].strip().encode('utf-8')
@@ -100,7 +108,7 @@ class GetGovNotice(BrowserView):
                 getResultsList.append({'noticeTitle':noticeTitle,
                                        'solicitationNumber':solicitationNumber,
                                        'noticeType':noticeType,
-                                       'sysnopsis':synopsis,
+                                       'synopsis':synopsis,
                                        'noticePackages':noticePackages,
                                        'contractingOfficeAddress':contractingOfficeAddress,
                                        'placeOfPerformance':placeOfPerformance,
@@ -111,15 +119,34 @@ class GetGovNotice(BrowserView):
                                        'postedDate':postedDate,
                                        'noticeUrl':noticeUrl})
             except:
-                writeLog(ERROR_LOG_PATH, str(link))
+                writeLog(ERROR_LOG_PATH, str('%s\t%s' % (datetime.now(),link)))
                 pass
         add_count = 0
         for result in getResultsList:
             if len(catalog({'portal_type':'usgov.content.govnotice', 'noticeUrl':result['noticeUrl']})) > 0:
                 continue
             else:
+                try:
+                    contentId = '%s%s' % (str(datetime.now().strftime('%Y%m%d%H%M')), str(randrange(10000000,100000000)))
+                    api.content.create(container=portal['notice'],
+                                       type='usgov.content.govnotice',
+                                       title=result['noticeTitle'],
+                                       id=contentId,
+                                       solicitationNumber = result['solicitationNumber'],
+                                       noticeType = result['noticeType'],
+                                       synopsis = result['synopsis'],
+                                       noticePackages = result['noticePackages'],
+                                       contractingOfficeAddress = result['contractingOfficeAddress'],
+                                       placeOfPerformance = result['placeOfPerformance'],
+                                       primaryPointOfContact = result['primaryPointOfContact'],
+                                       additionalInfo = result['additionalInfo'],
+                                       pointOfContacts = result['pointOfContacts'],
+                                       postedDate = result['postedDate'],
+                                       noticeUrl = result['noticeUrl'],)
+                except:
+                    continue
+                objectBrain = catalog(id=contentId)
+                object = objectBrain[0].getObject()
+                object.reindexObject()
                 add_count += 1
-                '''
-                api.content.create()
-                '''
-        return '總共新增 %s 筆' % add_count
+        return '總共新增 %s 筆,現在的page = %s' % (add_count, page)

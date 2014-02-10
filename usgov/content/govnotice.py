@@ -47,31 +47,37 @@ class IGovNotice(form.Schema, IImageScaleTraversable):
     )
 
     #描述
-    synopsis = schema.Text(
+    synopsis = RichText(
         title=_(u'Synopsis'),
         required=False,
     )
 
+    #附加檔案
+    noticePackages = RichText(
+        title=_(u'Notice Packages'),
+        required=False,
+    )
+
     #承辦地址
-    contractingOfficeAddress = schema.Text(
+    contractingOfficeAddress = RichText(
         title=_(u'Contracting Office Address'),
         required=False,
     )
 
     #履約地點
-    placeOfPerformance = schema.Text(
+    placeOfPerformance = RichText(
         title=_(u'Place Of Formance'),
         required=False,
     )
 
     #承辦聯絡人
-    primaryPointOfContact = schema.Text(
+    primaryPointOfContact = RichText(
         title=_(u'Primary Point Of Contact'),
         required=False,
     )
 
     #承辦代理人
-    secondaryPointOfContact = schema.Text(
+    secondaryPointOfContact = RichText(
         title=_(u'Secondary Point of Contact'),
         required=False,
     )
@@ -83,13 +89,13 @@ class IGovNotice(form.Schema, IImageScaleTraversable):
     )
 
     #附加資訊
-    additionalInfo = schema.Text(
+    additionalInfo = RichText(
         title=_(u'Additional Information'),
         required=False,
     )
 
     #聯絡地點
-    pointOfContacts = schema.Text(
+    pointOfContacts = RichText(
         title=_(u'Point of Contact(s)'),
         required=False,
     )
